@@ -1,17 +1,25 @@
 package com.example.cntt4_phamngoclinh.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class EmployeeDto {
-    @NotBlank(message = "bat buoc phai nhap ten ")
-    @Size(min = 5,max = 50,message = "do dai cho phep tu 5 den 50 ky tu")
+    @NotBlank(message = "ID không được trống")
     private String id;
-    @NotBlank(message = "Bat buoc phai nhap vi tri , ko duoc de trong ")
+
+    @NotBlank(message = "Full name không được trống")
+    @Size(min = 5, max = 50)
     private String fullName;
-    @Size(min = 1,message = "Muc luong phai khong the am va lon hon 0")
+
+    @NotBlank(message = "Position không được trống")
     private String position;
+
+    @NotNull(message = "Salary không được trống")
+    @Min(value = 1, message = "Salary phải > 0")
     private Double salary;
+
     private String avatar;
 
 

@@ -1,4 +1,5 @@
 package com.example.cntt4_phamngoclinh.controller;
+
 import com.example.cntt4_phamngoclinh.model.Employee;
 import com.example.cntt4_phamngoclinh.repository.EmployeeRepository;
 import jakarta.validation.Valid;
@@ -19,33 +20,39 @@ public class EmployeeeController {
 
     private final EmployeeRepository repo = new EmployeeRepository();
 
-    private final String uploadDir = "C:\\Users\\TRONG TIN\\Downloads\\cntt4_phamngoclinh\\src\\main\\webapp\\images\\";
+    private final String uploadDir = "C:/uploads/";
 
+    // LIST + SEARCH
     @GetMapping
-    public String list(@RequestParam(required = false) String keyword, Model model) {
+    public String list(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            Model model
+    ) {
 
-        List<Employee> employee;
+        List<Employee> employees;
 
         if (keyword != null && !keyword.isEmpty()) {
-            employee = repo.search(keyword);
+            employees = repo.search(keyword);
         } else {
-            employee = repo.findAll();
+            employees = repo.findAll();
         }
 
-        model.addAttribute("employee", employee);
+        model.addAttribute("employees", employees);
         model.addAttribute("keyword", keyword);
         return "list";
     }
 
+    // CREATE FORM
     @GetMapping("/create")
     public String createForm(Model model) {
         model.addAttribute("employee", new Employee());
         return "form";
     }
 
+    // SAVE
     @PostMapping("/save")
     public String save(
-            @Valid @ModelAttribute Employee employee,
+            @Valid @ModelAttribute("employee") Employee employee,
             BindingResult result,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
@@ -54,7 +61,51 @@ public class EmployeeeController {
             return "form";
         }
 
-        // upload ảnh
+        handleUpload(employee, file);
+
+        repo.save(employee);
+        return "redirect:/employee";
+    }
+
+    // EDIT
+    @GetMapping("/edit/{id}")
+    public String edit(
+            @PathVariable("id") String id,
+            Model model
+    ) {
+        model.addAttribute("employee", repo.findById(id));
+        return "form";
+    }
+
+    // UPDATE
+    @PostMapping("/update")
+    public String update(
+            @Valid @ModelAttribute("employee") Employee employee,
+            BindingResult result,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+
+        if (result.hasErrors()) {
+            return "form";
+        }
+
+        if (!file.isEmpty()) {
+            handleUpload(employee, file);
+        }
+
+        repo.update(employee);
+        return "redirect:/employee";
+    }
+
+    // DELETE
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") String id) {
+        repo.delete(id);
+        return "redirect:/employee";
+    }
+
+    // UPLOAD COMMON METHOD
+    private void handleUpload(Employee employee, MultipartFile file) throws IOException {
         if (!file.isEmpty()) {
             String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
             file.transferTo(new File(uploadDir + fileName));
@@ -62,41 +113,5 @@ public class EmployeeeController {
         } else {
             employee.setAvatar("default.png");
         }
-
-        repo.save(employee);
-        return "redirect:/employee";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable String id, Model model) {
-        model.addAttribute("employee", repo.findById(id));
-        return "form";
-    }
-
-    @PostMapping("/update")
-    public String update(
-            @Valid @ModelAttribute Employee employee,
-            BindingResult result,
-            @RequestParam("file") MultipartFile file
-    ) throws IOException {
-
-        if (result.hasErrors()) {
-            return "form";
-        }
-
-        if (!file.isEmpty()) {
-            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            file.transferTo(new File(uploadDir + fileName));
-            employee.setAvatar(fileName);
-        }
-
-        repo.update(employee);
-        return "redirect:/employee";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable String id) {
-        repo.delete(id);
-        return "redirect:/employee";
     }
 }

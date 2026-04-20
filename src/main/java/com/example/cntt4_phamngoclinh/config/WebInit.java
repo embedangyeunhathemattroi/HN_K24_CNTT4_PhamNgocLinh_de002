@@ -1,8 +1,9 @@
 package com.example.cntt4_phamngoclinh.config;
 
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
 import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.ServletRegistration;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class WebInit extends AbstractAnnotationConfigDispatcherServletInitializer {
 
@@ -24,12 +25,7 @@ public class WebInit extends AbstractAnnotationConfigDispatcherServletInitialize
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
         registration.setMultipartConfig(
-                new MultipartConfigElement(
-                        "C:/uploads",
-                        5 * 1024 * 1024,
-                        10 * 1024 * 1024,
-                        0
-                )
+                new MultipartConfigElement("C:/uploads", 5 * 1024 * 1024, 10 * 1024 * 1024, 0)
         );
     }
 }

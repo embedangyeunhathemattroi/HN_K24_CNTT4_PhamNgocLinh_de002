@@ -17,10 +17,9 @@
 </div>
 
 
-<div th:if="${#lists.isEmpty(cats)}" class="alert alert-warning">
-    Chưa có  Nhân Viên Trong Công Ty
+<div th:if="${#lists.isEmpty(employee)}" class="alert alert-warning">
+    Chưa có Nhân Viên
 </div>
-
 <table class="table table-bordered" th:if="${!#lists.isEmpty(employee)}">
     <thead>
     <tr>
@@ -35,28 +34,19 @@
 
     <tbody>
     <tr th:each="c : ${employee}">
-
-       <td th:text ="${c.id}"></td>
+        <td th:text="${c.id}"></td>
         <td th:text="${c.fullName}"></td>
         <td th:text="${c.position}"></td>
         <td th:text="${c.salary}"></td>
 
         <td>
-            <img th:src="@{'/uploads/' + ${c.avatar}}"
-                 width="80"
-                 height="80"
-                 style="object-fit: cover;"
-                 onerror="this.src='https://via.placeholder.com/80'">
+            <img th:src="@{'/images/' + ${c.avatar}}"
+                 width="80" height="80">
         </td>
 
         <td>
-            <a th:href="@{/employee/edit/{id}(id=${c.id})}" class="btn btn-warning btn-sm">Sửa</a>
-
-            <a th:href="@{/employee/delete/{id}(id=${c.id})}"
-               onclick="return confirm('Bạn chắc chắn xóa?')"
-               class="btn btn-danger btn-sm">
-                Xóa
-            </a>
+            <a th:href="@{/employee/edit/{id}(id=${c.id})}" class="btn btn-warning">Edit</a>
+            <a th:href="@{/employee/delete/{id}(id=${c.id})}" class="btn btn-danger">Delete</a>
         </td>
     </tr>
     </tbody>

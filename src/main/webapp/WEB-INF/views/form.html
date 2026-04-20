@@ -12,31 +12,26 @@
   <input type="hidden" th:field="*{id}"/>
 
   <div class="mb-3">
-    <label>Nickname</label>
-    <input class="form-control" th:field="*{fullName}" placeholder="Nhập fullName">
-
-    <div class="text-danger" th:errors="*{fullName}"></div>
+    <label>Full Name</label>
+    <input class="form-control" th:field="*{fullName}">
   </div>
 
   <div class="mb-3">
-    <label>position</label>
-    <input class="form-control" th:field="*{position}" placeholder="Nhập position">
-    <div class="text-danger" th:errors="*{position}"></div>
+    <label>Position</label>
+    <input class="form-control" th:field="*{position}">
   </div>
 
   <div class="mb-3">
-    <label>salary</label>
-    <input type="number" class="form-control" th:field="*{salary}" placeholder="Nhập salary" >
-    <div class="text-danger" th:errors="*{salary}"></div>
+    <label>Salary</label>
+    <input type="number" class="form-control" th:field="*{salary}">
   </div>
 
   <div class="mb-3">
     <label>Avatar</label>
-    <input type="file" name="file" class="form-control" placeholder="choose avatar" >
+    <input type="file" name="file" class="form-control">
   </div>
 
-  <button class="btn btn-success" class="btn btn-primary mb-3">Submit</button>
+  <button class="btn btn-success">Submit</button>
 </form>
-
 </body>
 </html>
